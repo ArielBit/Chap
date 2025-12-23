@@ -25,7 +25,7 @@ try{
             $count=$stmt->fetchColumn();
 
             if($count > 0){
-                echo "Votre Compte Exist.";
+                
                 header("Location: Confirm.html");
                 exit();
             }else{
