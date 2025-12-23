@@ -16,9 +16,9 @@ try{
     //Vérification par la méthode POST
 
     if($_SERVER["REQUEST_METHOD"] === "POST") {
-        $user_name= filter_input(INPUT_POST, 'user_name', FILTER_SANITIZE_SPECIAL_CHARS);
-        $email= filter_input(INPUT_POST, 'email' , FILTER_SANITIZE_SPECIAL_CHARS);
-        $pass= $_POST['pass']?? '';
+        $user_name= trim(filter_input(INPUT_POST, 'user_name', FILTER_SANITIZE_SPECIAL_CHARS));
+        $email= trim(filter_input(INPUT_POST, 'email' , FILTER_SANITIZE_SPECIAL_CHARS));
+        $pass= trim($_POST['pass']?? '');
     
 
    //Vérification des champs
