@@ -12,23 +12,22 @@ try{
     $connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     //Vérification par la méthode POST
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $pass = filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS);
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
+        $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
+        $pass = trim($_POST ['pass']?? '');
 
 
         if(empty($email) || empty($pass)){
             die('Tous les champs sont obligatoires.');
         }
-            $stmt=$connect->prepare("SELECT mot_de_passe  FROM dat WHERE email = :email AND mot_de_passe = :pass");
-            $stmt->bindParam(":email",$email);
-            $stmt->bindParam(":pass", $pass);
-            $stmt->execute();
-            $count=$stmt->fetchColumn();
+            $stmt=$connect->prepare("SELECT mot_de_passe  FROM dat WHERE email = :email");
+            $stmt->execute([':email',$email]);
+            $result=$stmt->fetch(PDO::FETCH_ASSOC);
 
-            if($count > 0){
-                
-                header("Location: Confirm.html");
+            if($result){
+                if(password_verify($pass, $result['mot_de_passs'])){
+        
+                header('Location: Confirm.html');
                 exit();
             }else{
                 echo "Votre Compte n'existe pas.";
@@ -38,18 +37,6 @@ try{
     }else{
         echo "Tout les champs sont obligatoires";
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }catch(PDOException $e){
     echo "Erreur de connexion" . $e->getMessage();
