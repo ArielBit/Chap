@@ -17,8 +17,10 @@ try{
         $pass = filter_input(INPUT_POST, 'pass', FILTER_SANITIZE_SPECIAL_CHARS);
 
 
-        if($email && $pass){
-            $stmt=$connect->prepare("SELECT COUNT(*) FROM dat WHERE email = :email AND mot_de_passe = :pass");
+        if(empty($email) || empty($pass)){
+            die('Tous les champs sont obligatoires.');
+        }
+            $stmt=$connect->prepare("SELECT mot_de_passe  FROM dat WHERE email = :email AND mot_de_passe = :pass");
             $stmt->bindParam(":email",$email);
             $stmt->bindParam(":pass", $pass);
             $stmt->execute();
